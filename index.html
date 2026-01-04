@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TapBoost v12.1</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #1f1f2e;
+  color: #fff;
+}
+
+header {
+  background: #2b2b40;
+  padding: 12px;
+  text-align: center;
+}
+
+nav {
+  display: flex;
+  overflow-x: auto;
+  background: #33334d;
+}
+
+nav button {
+  flex: 1;
+  min-width: 90px;
+  padding: 10px;
+  background: #444466;
+  border: none;
+  color: white;
+}
+
+nav button.active {
+  background: #00c896;
+  color: #000;
+}
+
+section {
+  display: none;
+  padding: 15px;
+}
+
+section.active {
+  display: block;
+}
+
+.btn {
+  background: #00c896;
+  border: none;
+  padding: 10px 16px;
+  margin-top: 10px;
+  cursor: pointer;
+  color: #000;
+}
+
+iframe {
+  width: 100%;
+  height: 300px;
+  margin-top: 10px;
+  border: none;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h2>TapBoost</h2>
+  <p>
+    Coins: <span id="coins">0</span> |
+    Gems: <span id="gems">0</span> |
+    Energy: <span id="energy">10</span>/10
+  </p>
+</header>
+
+<nav>
+  <button class="active" onclick="openTab('home', this)">Home</button>
+  <button onclick="openTab('shop', this)">Shop</button>
+  <button onclick="openTab('dramas', this)">Dramas</button>
+  <button onclick="openTab('ads', this)">Ads</button>
+</nav>
+
+<section id="home" class="active">
+  <h3>Welcome</h3>
+  <p>Earn coins by watching ads and spend them on dramas.</p>
+</section>
+
+<section id="shop">
+  <h3>Shop</h3>
+  <p>More items coming soon.</p>
+</section>
+
+<section id="dramas">
+  <h3>Dramas (60 coins)</h3>
+
+  <button class="btn" onclick="playDrama('d1')">Play Episode 1</button>
+  <iframe id="d1" style="display:none"
+    src="https://www.youtube.com/embed/zgOrBF50nU4"
+    allowfullscreen></iframe>
+
+  <br><br>
+
+  <button class="btn" onclick="playDrama('d2')">Play Episode 2</button>
+  <iframe id="d2" style="display:none"
+    src="https://www.youtube.com/embed/i3rdgPimzTM"
+    allowfullscreen></iframe>
+</section>
+
+<section id="ads">
+  <h3>Watch Ad</h3>
+  <p>Get +50 coins</p>
+  <button class="btn" onclick="watchAd()">Watch</button>
+</section>
+
+<script>
+let coins = Number(localStorage.getItem("coins")) || 50;
+let gems = Number(localStorage.getItem("gems")) || 0;
+let energy = Number(localStorage.getItem("energy")) || 10;
+
+updateStats();
+
+function updateStats() {
+  document.getElementById("coins").innerText = coins;
+  document.getElementById("gems").innerText = gems;
+  document.getElementById("energy").innerText = energy;
+  localStorage.setItem("coins", coins);
+  localStorage.setItem("gems", gems);
+  localStorage.setItem("energy", energy);
+}
+
+function openTab(id, btn) {
+  document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+
+  document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+}
+
+function playDrama(id) {
+  if (coins < 60) {
+    alert("Not enough coins");
+    return;
+  }
+  coins -= 60;
+  updateStats();
+  document.getElementById(id).style.display = "block";
+}
+
+function watchAd() {
+  coins += 50;
+  energy = 10;
+  updateStats();
+  alert("Ad watched. Coins added.");
+}
+</script>
+
+</body>
+  </html>
